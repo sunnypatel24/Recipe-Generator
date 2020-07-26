@@ -13,42 +13,42 @@ def main():
 def intro():
     print("Welcome! This is a program to generate a random recipe for a meal.\n")
     print("The categories recipes are pulled from are: ")
-    categoryLength = len(VALID_CATEGORIES)
-    for category in range(categoryLength - 1):
+    category_length = len(VALID_CATEGORIES)
+    for category in range(category_length - 1):
         print(VALID_CATEGORIES[category], end = ", ")
-    print(VALID_CATEGORIES[categoryLength - 1])
+    print(VALID_CATEGORIES[category_length - 1])
     print("\n")
     print("The areas recipes are pulled from are: ")
-    areaLength = len(VALID_AREAS)
-    for area in range(areaLength - 1):
+    area_length = len(VALID_AREAS)
+    for area in range(area_length - 1):
         print(VALID_AREAS[area], end = ", ")
-    print(VALID_AREAS[areaLength - 1])
+    print(VALID_AREAS[area_length - 1])
     print("\n")
 
 
 def getMeal():
     recipe = requests.get('https://www.themealdb.com/api/json/v1/1/random.php')
-    rawMeal = recipe.text
-    mealList = rawMeal.split(",")
+    raw_meal = recipe.text
+    meal_list = raw_meal.split(",")
     meal = "Meal: "
-    mealName = mealList[1].replace("\"strMeal\":", "").strip('"')
+    mealName = meal_list[1].replace("\"strMeal\":", "").strip('"')
     print(meal + mealName)
     category = "Category: "
-    categoryName = mealList[3].replace("\"strCategory\":", "").strip('"')
-    print(category + categoryName)
+    category_name = meal_list[3].replace("\"strCategory\":", "").strip('"')
+    print(category + category_name)
     area = "Area: "
-    areaName = mealList[4].replace("\"strArea\":", "").strip('"')
-    print(area + areaName)
+    area_name = meal_list[4].replace("\"strArea\":", "").strip('"')
+    print(area + area_name)
     index = 5
-    while ("\"strMealThumb\"" not in mealList[index]):
+    while ("\"strMealThumb\"" not in meal_list[index]):
         index += 1
-    mealPic = "Picture of Meal: "
-    mealLink = mealList[index].replace("\"strMealThumb\":", "").strip('"')     
-    print(mealPic + mealLink)
-    while ("\"strYoutube\"" not in mealList[index]):
+    meal_pic = "Picture of Meal: "
+    meal_link = meal_list[index].replace("\"strMealThumb\":", "").strip('"')     
+    print(meal_pic + meal_link)
+    while ("\"strYoutube\"" not in meal_list[index]):
         index += 1
-    mealVideo = "Video for how to make the meal: "
-    vidLink = mealList[index].replace("\"strYoutube\":", "").strip('"')
-    print(mealVideo + vidLink)
+    meal_video = "Video for how to make the meal: "
+    vid_link = meal_list[index].replace("\"strYoutube\":", "").strip('"')
+    print(meal_video + vid_link)
 
 main()    
