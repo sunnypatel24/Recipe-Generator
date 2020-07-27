@@ -33,22 +33,48 @@ def getMeal():
     meal = "Meal: "
     mealName = meal_list[1].replace("\"strMeal\":", "").strip('"')
     print(meal + mealName)
+
     category = "Category: "
     category_name = meal_list[3].replace("\"strCategory\":", "").strip('"')
     print(category + category_name)
+
     area = "Area: "
     area_name = meal_list[4].replace("\"strArea\":", "").strip('"')
     print(area + area_name)
+
     index = 5
     while ("\"strMealThumb\"" not in meal_list[index]):
         index += 1
     meal_pic = "Picture of Meal: "
     meal_link = meal_list[index].replace("\"strMealThumb\":", "").strip('"')     
     print(meal_pic + meal_link)
+
     while ("\"strYoutube\"" not in meal_list[index]):
         index += 1
     meal_video = "Video for how to make the meal: "
     vid_link = meal_list[index].replace("\"strYoutube\":", "").strip('"')
     print(meal_video + vid_link)
+
+    ingredients = {}
+    for var in range(1, 21):
+        name = ""
+        string = meal_list[index + var]
+        string_length = len(string)
+        for i in range(18, string_length):
+            name += string[i]
+            name = name.strip('"')
+        ingredients.update({name : var})
+    ingredients.popitem()
+    
+    index += var + 1
+    print(meal_list[index])
+        
+        
+    
+    
+    # print()
+    # index += 2;
+    
+    
 
 main()    
