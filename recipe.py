@@ -4,11 +4,12 @@ VALID_CATEGORIES = ["Pork", "Starter", "Chicken", "Side", "Seafood", "Miscellane
     
 VALID_AREAS = ["Irish", "British", "Italian", "French", "American", "Moroccan", "Tunisian", "Jamaican", "Indian", "Chinese", "Japanese", "Vietnamese", "Thai", "Polish", "Canadian", "Mexican", "Greek", "Unknown", "Spanish", "Malaysian", "Turkish", "Dutch"]
 
-
-def main():   
+def main():
     intro()
-    getMeal()
-    
+    meal = get_meal_details()
+    getIngredients(meal)
+    get_website(meal)
+
 
 def intro():
     print("Welcome! This is a program to generate a random recipe for a meal.\n")
@@ -23,58 +24,61 @@ def intro():
     for area in range(area_length - 1):
         print(VALID_AREAS[area], end = ", ")
     print(VALID_AREAS[area_length - 1])
-    print("\n")
+    print("\n")  
 
 
-def getMeal():
+def get_meal_details():
     recipe = requests.get('https://www.themealdb.com/api/json/v1/1/random.php')
-    raw_meal = recipe.text
-    meal_list = raw_meal.split(",")
-    meal = "Meal: "
-    mealName = meal_list[1].replace("\"strMeal\":", "").strip('"')
-    print(meal + mealName)
+    meal = recipe.json()
+    for dictionary in meal["meals"]:
+        print("Meal: ", dictionary["strMeal"], "\n")
+        print("Category: ", dictionary["strCategory"], "\n")
+        print("Area: ", dictionary["strArea"], "\n")
+        print("Instructions: ", dictionary["strInstructions"], "\n")
+        print("Picture of Meal: ", dictionary["strMealThumb"], "\n")
+        print("Video: ", dictionary["strYoutube"], "\n")
+        print("Ingredients and their measurements:", "\n")
+    return meal
 
-    category = "Category: "
-    category_name = meal_list[3].replace("\"strCategory\":", "").strip('"')
-    print(category + category_name)
 
-    area = "Area: "
-    area_name = meal_list[4].replace("\"strArea\":", "").strip('"')
-    print(area + area_name)
-
-    index = 5
-    while ("\"strMealThumb\"" not in meal_list[index]):
-        index += 1
-    meal_pic = "Picture of Meal: "
-    meal_link = meal_list[index].replace("\"strMealThumb\":", "").strip('"')     
-    print(meal_pic + meal_link)
-
-    while ("\"strYoutube\"" not in meal_list[index]):
-        index += 1
-    meal_video = "Video for how to make the meal: "
-    vid_link = meal_list[index].replace("\"strYoutube\":", "").strip('"')
-    print(meal_video + vid_link)
-
+def getIngredients(meal):
     ingredients = {}
-    for var in range(1, 21):
-        name = ""
-        string = meal_list[index + var]
-        string_length = len(string)
-        for i in range(18, string_length):
-            name += string[i]
-            name = name.strip('"')
-        ingredients.update({name : var})
-    ingredients.popitem()
-    
-    index += var + 1
-    print(meal_list[index])
-        
-        
-    
-    
-    # print()
-    # index += 2;
-    
-    
+    for dictionary in meal["meals"]:
+        ingredients[dictionary["strIngredient1"]] = dictionary["strMeasure1"]
+        ingredients[dictionary["strIngredient2"]] = dictionary["strMeasure2"]
+        ingredients[dictionary["strIngredient3"]] = dictionary["strMeasure3"]
+        ingredients[dictionary["strIngredient4"]] = dictionary["strMeasure4"]
+        ingredients[dictionary["strIngredient5"]] = dictionary["strMeasure5"]
+        ingredients[dictionary["strIngredient6"]] = dictionary["strMeasure6"]
+        ingredients[dictionary["strIngredient7"]] = dictionary["strMeasure7"]
+        ingredients[dictionary["strIngredient8"]] = dictionary["strMeasure8"]
+        ingredients[dictionary["strIngredient9"]] = dictionary["strMeasure9"]
+        ingredients[dictionary["strIngredient10"]] = dictionary["strMeasure10"]
+        ingredients[dictionary["strIngredient11"]] = dictionary["strMeasure11"]
+        ingredients[dictionary["strIngredient12"]] = dictionary["strMeasure12"]
+        ingredients[dictionary["strIngredient13"]] = dictionary["strMeasure13"]
+        ingredients[dictionary["strIngredient14"]] = dictionary["strMeasure14"]
+        ingredients[dictionary["strIngredient15"]] = dictionary["strMeasure15"]
+        ingredients[dictionary["strIngredient16"]] = dictionary["strMeasure16"]
+        ingredients[dictionary["strIngredient17"]] = dictionary["strMeasure17"]
+        ingredients[dictionary["strIngredient18"]] = dictionary["strMeasure18"]
+        ingredients[dictionary["strIngredient19"]] = dictionary["strMeasure19"]
+        ingredients[dictionary["strIngredient20"]] = dictionary["strMeasure20"]
+    if (ingredients.get('') == ''):
+        ingredients.pop('')
+    elif (ingredients.get(None) == None):
+        ingredients.popitem()
+    keys_list = list(ingredients)
+    values = ingredients.values()
+    values_list = list(values)
+    for i in range(len(keys_list)):
+        print(keys_list[i],":", values_list[i])
 
-main()    
+
+def get_website(meal):
+    print()
+    for dictionary in meal["meals"]:
+        print("Website of Recipe: ", dictionary["strSource"])
+
+
+main()
